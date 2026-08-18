@@ -142,6 +142,31 @@ belongs under the paragraph, so this is scoped above the breakpoint.
 neighbours via `::before` on every link after the first, with
 `pointer-events: none` so the bullet stays out of the link's hit area.
 
+**9 · "Sign in" hover.** The label turned orange on hover, which made the
+outlined pill read as text rather than a control. That came from the design's
+global `a:hover { color: oklch(0.7 0.19 45) }`, not from the button's own
+`style-hover`, which only lightens the border — so the fix had to override the
+global rule. The pill now fills with `--fg` and flips its label to `--bg`,
+which inverts correctly in light mode because both are themed tokens.
+`:focus-visible` gets the same treatment.
+
+## Behaviour layer
+
+`app.js` is regenerated, so hand-written behaviour lives in `enhancements.js`,
+loaded after it.
+
+Clicking "Sign in" fires a burst of 26 stars from the pointer, thrown out along
+a jittered ring, tumbling and falling as they fade — the same visual language
+as the marquee's cursor sparks. It uses the Web Animations API rather than
+injected keyframes, cleans up each star on `finish`, and removes the container
+afterwards. `preventDefault()` stops the `href="#"` from jumping the page and
+undercutting the effect, and the whole thing is skipped under
+`prefers-reduced-motion`.
+
+`build.js` tags the control with `data-signin` so both the CSS and the script
+address it directly rather than by position in the nav, and asserts that
+exactly one such control exists.
+
 ## Favicon
 
 `favicon.svg` is the same mark as `mark-trackstar.svg`, with the viewBox

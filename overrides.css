@@ -15,7 +15,33 @@
  *   6. Vertical rhythm between the hero and the sections below
  *   7. Desktop hero CTA alignment
  *   8. Desktop footer link separators
+ *   9. "Sign in" hover state
  */
+
+/* ---------------------------------------------------------------------------
+ * 9. "Sign in" reads as a button on hover, not a coloured link.
+ *
+ * The design's global `a:hover { color: oklch(0.7 0.19 45) }` turned the label
+ * orange, which made the outlined pill look like text rather than a control --
+ * and it was the global rule doing it, not the button's own style-hover, which
+ * only lightens the border.
+ *
+ * Filling the pill with --fg and flipping the label to --bg gives a clear
+ * pressed-looking target. Both tokens are already themed, so this inverts
+ * correctly in light mode too. focus-visible gets the same treatment so
+ * keyboard users see the same affordance.
+ * ------------------------------------------------------------------------ */
+[data-signin] {
+  transition: background-color 0.22s ease, border-color 0.22s ease,
+    color 0.22s ease !important;
+}
+
+[data-signin]:hover,
+[data-signin]:focus-visible {
+  background: var(--fg) !important;
+  border-color: var(--fg) !important;
+  color: var(--bg) !important;
+}
 
 /* ---------------------------------------------------------------------------
  * 1. Decorative glows escaped their sections.

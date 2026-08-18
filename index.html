@@ -80,7 +80,7 @@
         </svg>
       </button>
       <div style="width:1.5px;height:1.9em;background:var(--stroke);animation:ts-drop 0.9s cubic-bezier(0.16,1,0.3,1) 0.59s both"></div>
-      <a href="#" style="display:inline-flex;align-items:center;padding:0.6em 1.45em;border-radius:999px;border:1.5px solid var(--stroke);font-size:1.2em;font-weight:600;animation:ts-drop 0.9s cubic-bezier(0.16,1,0.3,1) 0.62s both" class="dc-h2">Sign in</a>
+      <a href="#" style="display:inline-flex;align-items:center;padding:0.6em 1.45em;border-radius:999px;border:1.5px solid var(--stroke);font-size:1.2em;font-weight:600;animation:ts-drop 0.9s cubic-bezier(0.16,1,0.3,1) 0.62s both" class="dc-h2" data-signin>Sign in</a>
     </div>
   </nav>
 </div>
@@ -495,5 +495,7 @@
   </div>
 </footer>
 <script src="./app.js"></script>
+<!-- Hand-authored behaviour, loaded after the generated logic. -->
+<script src="./enhancements.js"></script>
 </body>
 </html>

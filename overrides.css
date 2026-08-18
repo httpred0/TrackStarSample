@@ -1,0 +1,339 @@
+/* Hand-authored fixes layered on top of the generated design output.
+ *
+ * index.html and app.js are regenerated from "Hero Track Star.dc.html" by
+ * build.js, so corrections live here instead of in the generated files.
+ *
+ * The design sets its styles inline, and inline styles out-rank class and
+ * element selectors, so every declaration here needs !important to take
+ * effect. That is a consequence of the source format, not a shortcut.
+ *
+ *   1. Decorative glows escaping their sections
+ *   2. Top navbar fit on phones
+ *   3. Mobile hero scale
+ *   4. A slice of the next card in the mobile carousels
+ *   5. Mobile footer menu
+ *   6. Vertical rhythm between the hero and the sections below
+ *   7. Desktop hero CTA alignment
+ *   8. Desktop footer link separators
+ */
+
+/* ---------------------------------------------------------------------------
+ * 1. Decorative glows escaped their sections.
+ *
+ * Each content section positions large radial-gradient circles at negative
+ * offsets (e.g. left:-10em, width:30em) to bleed light in from the edges. The
+ * hero clips them because it sets overflow:hidden, but the three [data-shell]
+ * sections do not, so on a phone those circles extended past the right edge
+ * and widened the document.
+ *
+ * overflow-x: clip rather than hidden: hidden on one axis forces the other to
+ * auto, which would turn each section into a scroll container.
+ * ------------------------------------------------------------------------ */
+[data-shell]:not([data-topbar]) {
+  overflow-x: clip !important;
+}
+
+/* ---------------------------------------------------------------------------
+ * 2. The top navbar did not fit on phones.
+ *
+ * The row is flex-wrap: nowrap and measures 27.4x its font-size in width --
+ * 411px at the design's 15px mobile base, more than a 390px phone has. It did
+ * not merely overflow: flexbox squashed the round theme toggle into an oval
+ * and the bar grew from 72px to 87px tall. Wrapping to a second line is not an
+ * option, because the bar is position:fixed over the hero and a taller bar
+ * would cover the headline.
+ *
+ * The items are scaled down to fit: 3.4vw is ~13.3px at 390px. That alone
+ * frees enough width to keep the design's own nav gaps intact and still leave
+ * ~30px of slack, so the row breathes rather than only just fitting. Only the
+ * bar's side padding is trimmed, and only slightly.
+ *
+ * Every size in the bar (logo, labels, gaps, pill, toggle, padding) is em of
+ * this one font-size, so scaling it keeps the design's proportions intact.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 460px) {
+  [data-topbar] {
+    /* the bar's own side padding, --ts-pad */
+    padding-left: 1.2em !important;
+    padding-right: 1.2em !important;
+    font-size: min(var(--ts-base), 3.4vw) !important;
+  }
+
+  /* Between the logo and the right-hand group, and between "Lists (0)", the
+   * toggle, the divider and "Sign in" (--ts-navgap). Both are back at the
+   * design's own values -- scaling the type down freed enough room that the
+   * gaps no longer have to be traded away. */
+  [data-topbar] nav {
+    column-gap: 1.45em !important;
+  }
+
+  [data-topbar] nav > div:last-child {
+    gap: 1em !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 3. Mobile hero scale.
+ *
+ * The design's mobile breakpoint sets --ts-h1 to 3.25em (48.75px), which reads
+ * as a small headline on a phone. The headline should dominate the hero, so it
+ * is set fluidly instead: 20.5vw is ~80px at 390px and scales with the
+ * viewport, so it stays in proportion rather than overflowing narrow phones.
+ *
+ * The lead paragraph and CTA come down from --ts-lead 0.95em to 0.85em so the
+ * step between headline and supporting copy reads correctly.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 760px) {
+  :root {
+    --ts-h1: 20.5vw !important;
+    --ts-lead: 0.85em !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 4. Card carousels should show a slice of the next card.
+ *
+ * On mobile the card rows become horizontal scrollers, and a visible sliver of
+ * the following card is the affordance that tells you they scroll at all.
+ * --ts-cardw is each card's flex-basis as a percentage of the scroller's
+ * content box.
+ *
+ * That flex-basis was being ignored for two separate reasons:
+ *
+ *   min-width -- a flex item defaults to min-width:auto, so it cannot end up
+ *   narrower than its own min-content width (~314px here: padding, the
+ *   cover/detail grid and the likes row). That alone pinned every card to
+ *   ~90% of the scroller, leaving a 15px sliver.
+ *
+ *   box-sizing -- the feed cards carry 1.5em of padding and a 1px border, and
+ *   default content-box sizing applies the percentage basis to the content
+ *   box, adding another 47px on top. That is why those cards stayed 321px
+ *   wide while the story cards, which have no padding of their own, sat at
+ *   the correct 276px.
+ *
+ * The container is matched on its inline style, which is the one stable hook
+ * the generated markup offers for these three scrollers.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 760px) {
+  :root {
+    --ts-cardw: 78% !important;
+  }
+
+  [style*="display:var(--ts-cards)"] > div {
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 4b. Larger album covers in the hero marquee.
+ *
+ * --ts-cover is 11.5em (172px) at the mobile base, which undersells the
+ * artwork. A viewport-relative width scales with the phone instead: 54vw is
+ * ~210px at 390px, big enough to be the focus while still showing the
+ * neighbouring covers either side.
+ *
+ * --ts-marq is the marquee's min-height and has to grow with it, since each
+ * cover is a square of art plus its "RATED" meta row.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 760px) {
+  :root {
+    --ts-cover: 54vw !important;
+    --ts-marq: 66vw !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 5. Mobile footer menu.
+ *
+ * The design's footer is one horizontal row of plain underlined links. On a
+ * phone it should read as a tapable menu: label on the left, chevron on the
+ * right, separated by hairlines, with a larger mark and social row.
+ *
+ * The chevrons are real elements added at build time by enhance-footer.js;
+ * they are display:none above the breakpoint so the desktop footer renders
+ * exactly as the design specifies.
+ * ------------------------------------------------------------------------ */
+[data-fnav-chevron] {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* a larger, centred mark, as in the reference */
+  [data-footer] > div > div:first-child > img {
+    height: 3.6em !important;
+  }
+
+  /* the link row becomes a full-width list */
+  [data-footer] [data-fnav] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 0 !important;
+    text-align: left !important;
+  }
+
+  [data-footer] [data-fnav] > a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.6em !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0.95em 0.15em !important;
+    font-size: 1.3em !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+  }
+
+  [data-footer] [data-fnav] > a:not(:last-child) {
+    border-bottom: 1px solid rgb(42 16 4 / 0.16) !important;
+  }
+
+  /* the label takes the slack, pushing the chevron to the right edge */
+  [data-fnav-label] {
+    flex: 1 1 auto;
+  }
+
+  [data-fnav-chevron] {
+    display: block;
+    width: 0.95em;
+    height: 0.95em;
+    flex: 0 0 auto;
+    opacity: 0.8;
+  }
+
+  /* larger social circles */
+  [data-footer] [data-fsocial] {
+    gap: 0.8em !important;
+  }
+
+  [data-footer] [data-fsocial] > a {
+    width: 3.2em !important;
+    height: 3.2em !important;
+  }
+
+  [data-footer] [data-fsocial] svg {
+    width: 1.45em !important;
+    height: 1.45em !important;
+  }
+
+  /* The legal links live in two sibling groups (Terms/Privacy/Cookies and
+   * Jobs/Press/Apps). display:contents dissolves both boxes so their children
+   * become items of one shared wrapping row, which puts all six on a single
+   * centred line with the copyright above them.
+   *
+   * The copyright spans the full line, and needs text-align of its own: flex
+   * centring does not position text inside an item that already fills the
+   * line. */
+  [data-footer] [data-flegalrow] {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: baseline !important;
+    gap: 1.5em 0 !important;
+  }
+
+  [data-footer] [data-flegal] {
+    display: contents !important;
+  }
+
+  [data-footer] [data-flegal] > span:first-child {
+    flex-basis: 100% !important;
+    font-size: 1.05em !important;
+    text-align: center !important;
+  }
+
+  /* Each link grows to claim an equal share of the leftover width, so the row
+   * spans the footer edge to edge and the separators fall at even intervals.
+   * flex-basis auto rather than 0 keeps the longer labels from being squeezed
+   * on a 320px screen. */
+  [data-footer] [data-flegal] > a {
+    flex: 1 1 auto !important;
+    text-align: center !important;
+    font-size: 0.8em !important;
+  }
+
+  /* Hairline between every link. Because the two groups are separate parents,
+   * an a + a sibling rule would miss the seam between Cookies and Jobs, so the
+   * separator goes on all of them and is removed from the very first. */
+  [data-footer] [data-flegal] > a {
+    border-left: 1px solid rgb(42 16 4 / 0.3) !important;
+  }
+
+  [data-footer] [data-flegal]:first-of-type > a:first-of-type {
+    border-left: 0 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 6. Too much dead space between the hero and the next section.
+ *
+ * Measured at 390x844 the gap from the bottom of the cover art to the "Just
+ * rated" heading was 146px, made of three parts:
+ *
+ *   90px  the next section's own 6em top padding
+ *   32px  slack inside the marquee -- the hero is min-height:100svh and the
+ *         marquee is flex:1 0 auto, so it absorbed the leftover viewport
+ *         height while the covers stayed pinned to its top
+ *   24px  the hero's bottom padding
+ *
+ * Letting the hero size to its content removes the slack, and a mobile-sized
+ * top padding on the content sections removes most of the rest. The hero still
+ * fills the screen in practice: its content is ~810px tall at 390x844.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 760px) {
+  :root {
+    --ts-hero-min: auto !important;
+  }
+
+  [data-shell]:not([data-topbar]) {
+    padding-top: 2.6em !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 7. Desktop: "Start Rating" belongs at the far right of the hero.
+ *
+ * The lead row is a grid of repeat(auto-fit, minmax(min(100%, 18em), 1fr)),
+ * which resolves to four tracks at 1280px. The paragraph takes the first and
+ * the CTA simply lands in the second, leaving it stranded mid-row.
+ *
+ * Pinning the CTA to the last track and aligning it to that track's end puts
+ * it hard right whatever the column count, so it stays opposite the paragraph
+ * at every desktop width. Mobile collapses the grid to a single column, where
+ * the CTA belongs under the paragraph, so this is scoped above the breakpoint.
+ * ------------------------------------------------------------------------ */
+@media (min-width: 761px) {
+  [data-dc-mouseenter] {
+    grid-column: -2 / -1 !important;
+    justify-self: end !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 8. Desktop: footer links as a bullet-separated row.
+ *
+ * The design underlines each footer link, which reads as six heavy blocks in a
+ * row. Dropping the underline and setting a small bullet between neighbours
+ * makes it scan as one list.
+ *
+ * The bullet is a ::before on every link after the first, so it needs
+ * pointer-events:none to stay out of the link's hit area. The container gap is
+ * tightened because the bullet now contributes its own spacing on both sides.
+ * ------------------------------------------------------------------------ */
+@media (min-width: 761px) {
+  [data-footer] [data-fnav] {
+    gap: 1.4em 1.1em !important;
+  }
+
+  [data-footer] [data-fnav] > a {
+    text-decoration: none !important;
+  }
+
+  [data-footer] [data-fnav] > a + a::before {
+    content: "•";
+    margin-right: 1.1em;
+    color: rgb(42 16 4 / 0.26);
+    pointer-events: none;
+  }
+}

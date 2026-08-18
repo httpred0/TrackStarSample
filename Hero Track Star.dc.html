@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  html, body { margin: 0; padding: 0; background: #0a0a0a; }
+  a { color: var(--fg, #f2efea); text-decoration: none; }
+  a:hover { color: oklch(0.7 0.19 45); }
+  @keyframes ts-logo-in { 0% { opacity:0; filter:blur(6px); transform: perspective(760px) rotateY(-200deg) scale(0.7) } 55% { opacity:1; filter:blur(0) } 100% { opacity:1; filter:blur(0); transform: perspective(760px) rotateY(0) scale(1) } }
+  @keyframes ts-mask { from { transform: translateY(108%) } to { transform: translateY(0) } }
+  @keyframes ts-drop { from { opacity:0; filter:blur(7px); transform: translateY(-0.6em) } to { opacity:1; filter:blur(0); transform: translateY(0) } }
+  @keyframes ts-rise { from { opacity:0; filter:blur(9px); transform: translateY(1.1em) } to { opacity:1; filter:blur(0); transform: translateY(0) } }
+  @keyframes ts-rule { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+  @keyframes ts-dash { from { transform: translateX(52vw) scale(1.05) } to { transform: translateX(0) scale(1) } }
+  @keyframes ts-fly { 0% { transform: translateX(0); opacity:1 } 42% { transform: translateX(1.5em); opacity:0 } 43% { transform: translateX(-1.1em); opacity:0 } 100% { transform: translateX(0); opacity:1 } }
+  @keyframes ts-star-fall { 0% { opacity:0; transform: translate(-50%,-50%) scale(0.2) rotate(-8deg) } 22% { opacity:0.9; transform: translate(-50%,-38%) scale(1) rotate(6deg) } 100% { opacity:0; transform: translate(-50%,54px) scale(0.72) rotate(38deg) } }
+  @keyframes ts-sweep { 0% { opacity:0; transform: translate3d(-80%,-80%,0) } 22% { opacity:1 } 72% { opacity:0.85 } 100% { opacity:0; transform: translate3d(80%,80%,0) } }
+  @keyframes ts-pulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.07) } }
+  @keyframes ts-face-swap { 0%,100% { opacity:1; transform:scale(1) } 42% { opacity:0; transform:scale(0.86) } 58% { opacity:0; transform:scale(0.86) } }
+  @keyframes ts-pop { 0% { opacity:0; transform: translateY(0.6em) scale(0.86) } 60% { opacity:1; transform: translateY(0) scale(1.03) } 100% { opacity:1; transform: translateY(0) scale(1) } }
+  :root {
+    --ts-base: clamp(11px, 1.15vw, 20px);
+    --ts-pad: 1.9em; --ts-h1: 7.4em; --ts-h2: 4.2em; --ts-hero-h: 100vh;
+    --ts-cards: grid; --ts-cardov: visible; --ts-cardw: auto; --ts-bleed: auto; --ts-cardpad: 0; --ts-hero-min: 0; --ts-tap: 2.1em; --ts-lead: 0.78em; --ts-marq: 20em; --ts-cover: 16.5em; --ts-secgap: 4.5em; --ts-navgap: 1.6em; --ts-story-ar: 3.1; --ts-fdir: row; --ts-fjust: space-between; --ts-fwrap: nowrap; --ts-fnavjust: flex-start; --ts-fgap: 2.8em; --ts-flogo: 3.1em; --ts-forder: 0;
+  }
+  @media (max-width: 760px) {
+    :root {
+      --ts-base: 15px;
+      --ts-pad: 1.3em; --ts-h1: 3.25em; --ts-h2: 2.35em; --ts-hero-h: auto;
+      --ts-cards: flex; --ts-cardov: auto; --ts-cardw: 82%; --ts-bleed: auto; --ts-cardpad: 0; --ts-hero-min: 100svh; --ts-tap: 2.7em; --ts-lead: 0.95em; --ts-marq: 15em; --ts-cover: 11.5em; --ts-secgap: 2.6em; --ts-navgap: 1em; --ts-story-ar: 2.05; --ts-fdir: column; --ts-fjust: center; --ts-fwrap: wrap; --ts-fnavjust: center; --ts-fgap: 1.9em; --ts-flogo: 2.6em; --ts-forder: 1;
+    }
+  }
+  @keyframes ts-marquee { from { transform: translateX(0) } to { transform: translateX(calc(-50% - 0.9em)) } }
+</style>
+</helmet>
+
+<div data-shell data-topbar style="--bg:#0a0a0a;--fg:#f2efea;--muted:#c9c5be;--dim:#8b8781;--line:#2a2825;--stroke:#4a4744;--art:#141312;--chip:rgb(255 255 255 / 0.06);--chip-hover:rgb(255 255 255 / 0.13);--scrim-a:rgb(10 10 10 / 0.88);--scrim-b:rgb(10 10 10 / 0.42);position:fixed;top:0;left:0;right:0;z-index:50;color:var(--fg);font-family:Archivo,Helvetica,sans-serif;font-size:var(--ts-base);padding:1.57em var(--ts-pad) 0;box-sizing:border-box;pointer-events:none">
+  <div style="position:absolute;top:0;left:0;right:0;height:8em;z-index:1;pointer-events:none;background:linear-gradient(to bottom, var(--scrim-a), var(--scrim-b) 58%, transparent);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);mask-image:linear-gradient(to bottom, #000 0%, #000 46%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 46%, transparent 100%)"></div>
+
+  <nav style="position:relative;z-index:2;pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:1.45em">
+    <div style="display:flex;align-items:center;gap:0.72em">
+      <img src="./mark-trackstar.svg" alt="Track Star" style="height:3.1em;width:auto;display:block;animation:ts-logo-in 1.3s cubic-bezier(0.16,1,0.3,1) 0.1s both">
+    </div>
+    <div style="display:flex;align-items:center;gap:var(--ts-navgap)">
+      <a href="#" style="display:inline-flex;align-items:center;gap:0.55em;font-size:1.2em;font-weight:600;animation:ts-drop 0.9s cubic-bezier(0.16,1,0.3,1) 0.5s both">
+        <svg viewBox="0 0 16 16" style="width:0.85em;height:0.85em;flex:0 0 auto" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 4h8M6 8h8M6 12h8"></path>
+          <path d="M2.4 4h.01M2.4 8h.01M2.4 12h.01"></path>
+        </svg>
+        Lists (0)
+      </a>
+      <button data-theme-toggle onClick="{{ toggleTheme }}" style="display:inline-flex;align-items:center;justify-content:center;width:var(--ts-tap);height:var(--ts-tap);padding:0;border:0;border-radius:999px;background:var(--chip);color:var(--fg);cursor:pointer;font-size:1.2em" style-hover="background:var(--chip-hover)" aria-label="Toggle dark and light mode">
+        <svg data-icon-moon viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:0.85em;height:0.85em;display:block">
+          <path transform="translate(0.5 -0.5)" d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8 5.6 5.6 0 1 0 13.2 9.6Z"></path>
+        </svg>
+        <svg data-icon-sun viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="width:0.85em;height:0.85em;display:none">
+          <circle cx="8" cy="8" r="3.1"></circle>
+          <path d="M8 1.4v1.5M8 13.1v1.5M1.4 8h1.5M13.1 8h1.5M3.4 3.4l1.05 1.05M11.55 11.55l1.05 1.05M12.6 3.4l-1.05 1.05M4.45 11.55L3.4 12.6"></path>
+        </svg>
+      </button>
+      <div style="width:1.5px;height:1.9em;background:var(--stroke);animation:ts-drop 0.9s cubic-bezier(0.16,1,0.3,1) 0.59s both"></div>
+      <a href="#" style="display:inline-flex;align-items:center;padding:0.6em 1.45em;border-radius:999px;border:1.5px solid var(--stroke);font-size:1.2em;font-weight:600;animation:ts-drop 0.9s cubic-bezier(0.16,1,0.3,1) 0.62s both" style-hover="border-color:var(--fg)">Sign in</a>
+    </div>
+  </nav>
+</div>
+
+<div style="position:relative;height:var(--ts-hero-h);min-height:var(--ts-hero-min);box-sizing:border-box;--bg:#0a0a0a;--fg:#f2efea;--muted:#c9c5be;--dim:#8b8781;--line:#403d39;--stroke:#4a4744;--art:#141312;--chip:rgb(255 255 255 / 0.06);--chip-hover:rgb(255 255 255 / 0.13);--scrim-a:rgb(10 10 10 / 0.88);--scrim-b:rgb(10 10 10 / 0.42);background:var(--bg);color:var(--fg);font-family:Archivo,Helvetica,sans-serif;font-size:var(--ts-base);transition:background 0.4s ease,color 0.4s ease;padding:6em var(--ts-pad) 1.57em;display:flex;flex-direction:column;gap:1.1em;overflow:hidden">
+
+  <div data-stars style="position:absolute;inset:0;z-index:0;pointer-events:none;mask-image:linear-gradient(to bottom, #000 0%, #000 52%, rgb(0 0 0 / 0.45) 78%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 52%, rgb(0 0 0 / 0.45) 78%, transparent 100%);background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2228%22%20viewBox%3D%220%200%2040%2028%22%3E%3Cpolygon%20points%3D%2220%2C10.6%2020.83%2C13.1%2023.45%2C13.1%2021.31%2C14.66%2022.14%2C17.16%2020%2C15.6%2017.86%2C17.16%2018.69%2C14.66%2016.55%2C13.1%2019.17%2C13.1%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E');background-size:40px 28px;background-position:center;opacity:0.04"></div>
+  <div data-stars-hot style="position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2228%22%20viewBox%3D%220%200%2040%2028%22%3E%3Cpolygon%20points%3D%2220%2C10.6%2020.83%2C13.1%2023.45%2C13.1%2021.31%2C14.66%2022.14%2C17.16%2020%2C15.6%2017.86%2C17.16%2018.69%2C14.66%2016.55%2C13.1%2019.17%2C13.1%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E');background-size:40px 28px;background-position:center;opacity:0.1"></div>
+
+
+
+  <h1 style="position:relative;z-index:1;margin:0.24em 0 0.14em;font-weight:800;font-size:var(--ts-h1);line-height:0.88;letter-spacing:-0.045em;max-width:15ch;text-wrap:balance">
+    <span style="display:block;overflow:hidden;padding-bottom:0.02em"><span style="display:block;animation:ts-mask 1.15s cubic-bezier(0.16,1,0.3,1) 0.35s both">Rate the records</span></span>
+    <span style="display:block;overflow:hidden;padding-bottom:0.02em"><span style="display:block;color:oklch(0.7 0.19 45);animation:ts-mask 1.15s cubic-bezier(0.16,1,0.3,1) 0.5s both">you love.</span></span>
+  </h1>
+
+  <div style="position:relative;z-index:1;flex:0 0 auto;height:1px;min-height:1px;background:var(--line);transform-origin:left center;animation:ts-rule 1.4s cubic-bezier(0.16,1,0.3,1) 1.05s both"></div>
+
+  <div style="position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18em),1fr));gap:1.6em 2.6em;align-items:end;font-size:var(--ts-lead);font-weight:600;letter-spacing:0.1em;text-transform:uppercase">
+    <p style="animation:ts-rise 1.1s cubic-bezier(0.16,1,0.3,1) 1.2s both;margin:0;font-family:Archivo,Helvetica,sans-serif;font-size:1.22em;font-weight:500;line-height:1.5;letter-spacing:-0.01em;text-transform:none;color:var(--muted);max-width:54ch;text-wrap:pretty">Track Star is where you score albums 0–10, build a shelf of your all-time favorites, and see what your friends are listening to.</p>
+    <a href="#" style="animation:ts-rise 1.1s cubic-bezier(0.16,1,0.3,1) 1.32s both;display:inline-flex;align-items:center;gap:0.6em;padding:0.35em 0;color:oklch(0.7 0.19 45);font-size:1.5em;font-weight:600;letter-spacing:0.01em;text-transform:none" onMouseEnter="{{ ctaIn }}" onMouseLeave="{{ ctaOut }}" style-hover="color:oklch(0.8 0.17 45)">Start Rating
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-cta-arrow style="width:0.95em;height:0.95em;flex:0 0 auto">
+        <path d="M2.8 8h10M9 4.2 12.8 8 9 11.8"></path>
+      </svg>
+    </a>
+  </div>
+
+  <div data-marquee style="flex:1 0 auto;min-height:var(--ts-marq);position:relative;z-index:1;margin:1.57em calc(-1 * var(--ts-pad)) 0;padding-top:1.08em;overflow:hidden;display:flex;align-items:flex-start;mask-image:linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);-webkit-mask-image:linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%)">
+    <div>
+    <div data-track style="display:flex;gap:1.8em;align-items:flex-start">
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.4</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-1.png" alt="Album cover 1" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.2</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-2.png" alt="Album cover 2" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">10</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-3.png" alt="Album cover 3" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.5</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-4.png" alt="Album cover 4" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.1</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-5.png" alt="Album cover 5" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.7</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-6.png" alt="Album cover 6" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.3</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-7.png" alt="Album cover 7" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.9</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-8.png" alt="Album cover 8" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.4</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-1.png" alt="Album cover 1" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.2</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-2.png" alt="Album cover 2" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">10</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-3.png" alt="Album cover 3" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.5</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-4.png" alt="Album cover 4" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.1</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-5.png" alt="Album cover 5" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.7</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-6.png" alt="Album cover 6" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.3</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-7.png" alt="Album cover 7" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+      <div data-cover style="flex:0 0 auto;width:var(--ts-cover);display:flex;flex-direction:column;justify-content:flex-start;gap:0;transform-origin:center bottom;will-change:transform">
+        <div data-meta style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5em">
+          <span style="font-size:0.63em;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)">Rated</span>
+          <span style="font-size:1.25em;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--fg)">9.9</span>
+        </div>
+        <div data-art style="position:relative;margin-top:0.6em;aspect-ratio:1;background:var(--art);transform-origin:center top;will-change:transform"><img src="./covers/cover-8.png" alt="Album cover 8" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div data-shell style="--bg:#0a0a0a;--fg:#f2efea;--muted:#c9c5be;--dim:#8b8781;--line:#403d39;--art:#141312;--chip:rgb(255 255 255 / 0.06);background:var(--bg);color:var(--fg);font-family:Archivo,Helvetica,sans-serif;font-size:var(--ts-base);padding:6em var(--ts-pad) 2.5em;box-sizing:border-box;position:relative">
+  <div style="position:absolute;top:2em;left:-8em;width:34em;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, oklch(0.7 0.19 45 / 0.07) 0%, oklch(0.7 0.19 45 / 0.03) 36%, transparent 74%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;bottom:2em;right:-10em;width:28em;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, oklch(0.7 0.19 45 / 0.1) 0%, oklch(0.7 0.19 45 / 0.045) 34%, transparent 72%);pointer-events:none;z-index:0"></div>
+  <div style="position:relative;z-index:1;max-width:62em;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:0.7em">
+    <h2 data-reveal style="margin:0;font-size:var(--ts-h2);font-weight:800;line-height:0.95;letter-spacing:-0.045em;text-wrap:balance">Just rated, a minute ago.</h2>
+    <p data-reveal style="margin:0.5em auto 0;max-width:44em;font-size:0.95em;font-weight:500;line-height:1.5;color:var(--muted);text-wrap:pretty">Every score comes with a sentence worth reading.</p>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0.9em;margin:1.2em auto 0;width:max-content;max-width:100%">
+      <div style="display:flex;align-items:center;padding-left:0.62em">
+        <div data-pop style="width:3.1em;height:3.1em;border-radius:50%;background:var(--art);box-shadow:0 0 0 2.5px var(--bg);margin-left:-0.62em;overflow:hidden;flex:0 0 auto"><img data-face="0" loading="lazy" decoding="async" src="./people/p1.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div data-pop style="width:3.1em;height:3.1em;border-radius:50%;background:var(--art);box-shadow:0 0 0 2.5px var(--bg);margin-left:-0.62em;overflow:hidden;flex:0 0 auto"><img data-face="1" loading="lazy" decoding="async" src="./people/p4.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div data-pop style="width:3.1em;height:3.1em;border-radius:50%;background:var(--art);box-shadow:0 0 0 2.5px var(--bg);margin-left:-0.62em;overflow:hidden;flex:0 0 auto"><img data-face="2" loading="lazy" decoding="async" src="./people/p3.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div data-pop style="width:3.1em;height:3.1em;border-radius:50%;background:var(--art);box-shadow:0 0 0 2.5px var(--bg);margin-left:-0.62em;overflow:hidden;flex:0 0 auto"><img data-face="3" loading="lazy" decoding="async" src="./people/p6.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div data-pop data-pulse style="display:flex;align-items:center;justify-content:center;width:3.1em;height:3.1em;border-radius:50%;background:oklch(0.7 0.19 45);box-shadow:0 0 0 2.5px var(--bg);margin-left:-0.62em;color:#0a0a0a;flex:0 0 auto"><span style="font-size:0.82em;font-weight:800;letter-spacing:-0.03em">+100K</span></div>
+      </div>
+      <span data-reveal style="font-size:0.9em;font-weight:600;color:var(--dim)">1,284 people rated an album in the last hour</span>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:1;max-width:82em;margin:var(--ts-secgap) auto 0;display:var(--ts-cards);grid-template-columns:repeat(auto-fit,minmax(min(100%,20em),1fr));gap:1.5em;overflow-x:var(--ts-cardov);scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:var(--ts-bleed);padding-inline:var(--ts-cardpad);">
+    <div data-shine style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1.15em;padding:1.5em;border-radius:1.4em;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:rgb(255 255 255 / 0.04);border-color:rgb(255 255 255 / 0.16);transform:translateY(-5px);box-shadow:0 30px 70px rgb(0 0 0 / 0.5), inset 1px 1px 0 rgb(255 255 255 / 0.09)">
+      <div style="display:flex;align-items:center;gap:0.8em">
+        <div style="width:2.4em;height:2.4em;border-radius:50%;background:var(--art);overflow:hidden;flex:0 0 auto"><img loading="lazy" decoding="async" src="./people/p2.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.15em;min-width:0">
+          <span style="font-size:1.02em;font-weight:700;letter-spacing:-0.01em">mariana.fm</span>
+          <span style="font-size:0.85em;font-weight:500;color:var(--dim)">Just rated this album</span>
+        </div>
+        <span style="margin-left:auto;font-size:0.8em;font-weight:500;color:var(--dim)">2m ago</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:minmax(5.5em,7em) minmax(0,1fr);gap:1.1em">
+        <div style="aspect-ratio:1;border-radius:0.5em;overflow:hidden;background:var(--art)"><img loading="lazy" decoding="async" src="./covers/cover-3.png" alt="The Resistance" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.6em;min-width:0">
+          <div style="display:flex;align-items:baseline;gap:0.45em;flex-wrap:wrap">
+            <span style="font-size:1.18em;font-weight:800;letter-spacing:-0.03em">The Resistance</span>
+            <span style="font-size:1em;font-weight:500;color:var(--dim)">(2009)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.6em;flex-wrap:wrap;font-size:0.82em;font-weight:600;color:var(--muted)">
+            <span style="padding:0.2em 0.5em;border-radius:0.35em;background:var(--chip)">Alt rock</span>
+            <span style="color:oklch(0.7 0.19 45);font-weight:800">★ 9.6</span>
+            <span style="color:var(--dim)">LP</span>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin:0 0 auto;font-size:1.02em;font-weight:500;line-height:1.55;color:var(--muted);text-wrap:pretty">Put this on in a tunnel at 2am and it rearranges your nervous system. Still the best closing three tracks of the decade.</p>
+
+      <div style="display:flex;align-items:center;gap:1.4em;margin-top:auto;padding-top:0.9em;border-top:1px solid var(--line);font-size:0.82em;font-weight:600;color:var(--dim)">
+        <span>12.4K likes</span>
+        <span>318 comments</span>
+        <span style="margin-left:auto;color:oklch(0.7 0.19 45)">Add to list</span>
+      </div>
+    </div>
+    <div data-shine style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1.15em;padding:1.5em;border-radius:1.4em;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:rgb(255 255 255 / 0.04);border-color:rgb(255 255 255 / 0.16);transform:translateY(-5px);box-shadow:0 30px 70px rgb(0 0 0 / 0.5), inset 1px 1px 0 rgb(255 255 255 / 0.09)">
+      <div style="display:flex;align-items:center;gap:0.8em">
+        <div style="width:2.4em;height:2.4em;border-radius:50%;background:var(--art);overflow:hidden;flex:0 0 auto"><img loading="lazy" decoding="async" src="./people/p5.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.15em;min-width:0">
+          <span style="font-size:1.02em;font-weight:700;letter-spacing:-0.01em">bruno_v</span>
+          <span style="font-size:0.85em;font-weight:500;color:var(--dim)">Just rated this album</span>
+        </div>
+        <span style="margin-left:auto;font-size:0.8em;font-weight:500;color:var(--dim)">14m ago</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:minmax(5.5em,7em) minmax(0,1fr);gap:1.1em">
+        <div style="aspect-ratio:1;border-radius:0.5em;overflow:hidden;background:var(--art)"><img loading="lazy" decoding="async" src="./covers/cover-4.png" alt="Pet Sounds" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.6em;min-width:0">
+          <div style="display:flex;align-items:baseline;gap:0.45em;flex-wrap:wrap">
+            <span style="font-size:1.18em;font-weight:800;letter-spacing:-0.03em">Pet Sounds</span>
+            <span style="font-size:1em;font-weight:500;color:var(--dim)">(1966)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.6em;flex-wrap:wrap;font-size:0.82em;font-weight:600;color:var(--muted)">
+            <span style="padding:0.2em 0.5em;border-radius:0.35em;background:var(--chip)">Pop</span>
+            <span style="color:oklch(0.7 0.19 45);font-weight:800">★ 10</span>
+            <span style="color:var(--dim)">LP</span>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin:0 0 auto;font-size:1.02em;font-weight:500;line-height:1.55;color:var(--muted);text-wrap:pretty">Sixty years old and still sounds like someone inventing loneliness in a studio full of bicycle bells.</p>
+
+      <div style="display:flex;align-items:center;gap:1.4em;margin-top:auto;padding-top:0.9em;border-top:1px solid var(--line);font-size:0.82em;font-weight:600;color:var(--dim)">
+        <span>31.2K likes</span>
+        <span>1.1K comments</span>
+        <span style="margin-left:auto;color:oklch(0.7 0.19 45)">Add to list</span>
+      </div>
+    </div>
+    <div data-shine style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1.15em;padding:1.5em;border-radius:1.4em;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:rgb(255 255 255 / 0.04);border-color:rgb(255 255 255 / 0.16);transform:translateY(-5px);box-shadow:0 30px 70px rgb(0 0 0 / 0.5), inset 1px 1px 0 rgb(255 255 255 / 0.09)">
+      <div style="display:flex;align-items:center;gap:0.8em">
+        <div style="width:2.4em;height:2.4em;border-radius:50%;background:var(--art);overflow:hidden;flex:0 0 auto"><img loading="lazy" decoding="async" src="./people/p7.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.15em;min-width:0">
+          <span style="font-size:1.02em;font-weight:700;letter-spacing:-0.01em">joaco</span>
+          <span style="font-size:0.85em;font-weight:500;color:var(--dim)">Just rated this album</span>
+        </div>
+        <span style="margin-left:auto;font-size:0.8em;font-weight:500;color:var(--dim)">38m ago</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:minmax(5.5em,7em) minmax(0,1fr);gap:1.1em">
+        <div style="aspect-ratio:1;border-radius:0.5em;overflow:hidden;background:var(--art)"><img loading="lazy" decoding="async" src="./covers/cover-7.png" alt="World Music Radio" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.6em;min-width:0">
+          <div style="display:flex;align-items:baseline;gap:0.45em;flex-wrap:wrap">
+            <span style="font-size:1.18em;font-weight:800;letter-spacing:-0.03em">World Music Radio</span>
+            <span style="font-size:1em;font-weight:500;color:var(--dim)">(2023)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.6em;flex-wrap:wrap;font-size:0.82em;font-weight:600;color:var(--muted)">
+            <span style="padding:0.2em 0.5em;border-radius:0.35em;background:var(--chip)">Soul</span>
+            <span style="color:oklch(0.7 0.19 45);font-weight:800">★ 9.1</span>
+            <span style="color:var(--dim)">LP</span>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin:0 0 auto;font-size:1.02em;font-weight:500;line-height:1.55;color:var(--muted);text-wrap:pretty">A station that only plays songs from a country that does not exist yet. Loses the thread twice, finds it three times.</p>
+
+      <div style="display:flex;align-items:center;gap:1.4em;margin-top:auto;padding-top:0.9em;border-top:1px solid var(--line);font-size:0.82em;font-weight:600;color:var(--dim)">
+        <span>8.7K likes</span>
+        <span>204 comments</span>
+        <span style="margin-left:auto;color:oklch(0.7 0.19 45)">Add to list</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div data-shell style="--bg:#0a0a0a;--fg:#f2efea;--muted:#c9c5be;--dim:#8b8781;--line:#403d39;--art:#141312;--chip:rgb(255 255 255 / 0.06);background:var(--bg);color:var(--fg);font-family:Archivo,Helvetica,sans-serif;font-size:var(--ts-base);padding:1.5em var(--ts-pad) 3em;box-sizing:border-box;position:relative">
+  <div style="position:absolute;top:8em;right:-9em;width:30em;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, oklch(0.7 0.19 45 / 0.13) 0%, oklch(0.7 0.19 45 / 0.059) 34%, transparent 72%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;bottom:3em;left:-6em;width:26em;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, oklch(0.7 0.19 45 / 0.09) 0%, oklch(0.7 0.19 45 / 0.041) 34%, transparent 72%);pointer-events:none;z-index:0"></div>
+  <div style="position:relative;z-index:1;max-width:82em;margin:0 auto;padding-top:1.5em">
+    <div style="position:relative;z-index:1;max-width:62em;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:0.7em">
+      <h2 style="margin:0;font-size:var(--ts-h2);font-weight:800;line-height:0.95;letter-spacing:-0.045em;text-wrap:balance">The Track Star Podcast.</h2>
+      <p style="margin:0.5em auto 0;max-width:44em;font-size:0.95em;font-weight:500;line-height:1.5;color:var(--muted);text-wrap:pretty">New episodes every Wednesday.</p>
+    </div>
+
+    <div style="margin-top:var(--ts-secgap);display:var(--ts-cards);grid-template-columns:repeat(auto-fit,minmax(min(100%,20em),1fr));gap:1.5em;overflow-x:var(--ts-cardov);scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:var(--ts-bleed);padding-inline:var(--ts-cardpad);">
+      <div style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:1.4em;overflow:hidden;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:linear-gradient(135deg, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.045) 38%, rgb(255 255 255 / 0.015) 68%, rgb(255 255 255 / 0) 100%);border-color:rgb(255 255 255 / 0.18);transform:translateY(-4px);box-shadow:0 24px 60px rgb(0 0 0 / 0.45)">
+        <div data-video style="position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--art);flex:0 0 auto">
+          <img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/WFRV9rLNq10/hqdefault.jpg" alt="Testing a frontman on his own back catalogue" style="width:100%;height:100%;object-fit:cover;display:block">
+          <span style="position:absolute;right:0.6em;bottom:0.6em;padding:0.2em 0.45em;border-radius:0.3em;background:rgb(0 0 0 / 0.78);font-size:0.78em;font-weight:700;color:#f2efea">7:05</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.75em;padding:1.2em 1.3em 1.4em;flex:1">
+        <a href="https://www.youtube.com/watch?v=WFRV9rLNq10" style="font-size:1.22em;font-weight:800;line-height:1.2;letter-spacing:-0.03em;color:var(--fg);text-wrap:balance" style-hover="color:oklch(0.7 0.19 45)">Testing a frontman on his own back catalogue</a>
+        <div style="display:flex;align-items:center;gap:0.6em;margin-top:auto;font-size:0.85em;font-weight:600;color:var(--dim)">
+          <span>98K views</span>
+          <span>·</span>
+          <span>1 day ago</span>
+        </div>
+        </div>
+      </div>
+      <div style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:1.4em;overflow:hidden;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:linear-gradient(135deg, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.045) 38%, rgb(255 255 255 / 0.015) 68%, rgb(255 255 255 / 0) 100%);border-color:rgb(255 255 255 / 0.18);transform:translateY(-4px);box-shadow:0 24px 60px rgb(0 0 0 / 0.45)">
+        <div data-video style="position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--art);flex:0 0 auto">
+          <img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/rOnC3WuxL9M/hqdefault.jpg" alt="Testing Brittany Howard on 60 years of soul" style="width:100%;height:100%;object-fit:cover;display:block">
+          <span style="position:absolute;right:0.6em;bottom:0.6em;padding:0.2em 0.45em;border-radius:0.3em;background:rgb(0 0 0 / 0.78);font-size:0.78em;font-weight:700;color:#f2efea">7:47</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.75em;padding:1.2em 1.3em 1.4em;flex:1">
+        <a href="https://www.youtube.com/watch?v=rOnC3WuxL9M" style="font-size:1.22em;font-weight:800;line-height:1.2;letter-spacing:-0.03em;color:var(--fg);text-wrap:balance" style-hover="color:oklch(0.7 0.19 45)">Testing Brittany Howard on 60 years of soul</a>
+        <div style="display:flex;align-items:center;gap:0.6em;margin-top:auto;font-size:0.85em;font-weight:600;color:var(--dim)">
+          <span>53K views</span>
+          <span>·</span>
+          <span>6 days ago</span>
+        </div>
+        </div>
+      </div>
+      <div style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:1.4em;overflow:hidden;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:linear-gradient(135deg, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.045) 38%, rgb(255 255 255 / 0.015) 68%, rgb(255 255 255 / 0) 100%);border-color:rgb(255 255 255 / 0.18);transform:translateY(-4px);box-shadow:0 24px 60px rgb(0 0 0 / 0.45)">
+        <div data-video style="position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--art);flex:0 0 auto">
+          <img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/ahKJgniJuAo/hqdefault.jpg" alt="Testing a drummer on drummers he has never heard" style="width:100%;height:100%;object-fit:cover;display:block">
+          <span style="position:absolute;right:0.6em;bottom:0.6em;padding:0.2em 0.45em;border-radius:0.3em;background:rgb(0 0 0 / 0.78);font-size:0.78em;font-weight:700;color:#f2efea">8:15</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.75em;padding:1.2em 1.3em 1.4em;flex:1">
+        <a href="https://www.youtube.com/watch?v=ahKJgniJuAo" style="font-size:1.22em;font-weight:800;line-height:1.2;letter-spacing:-0.03em;color:var(--fg);text-wrap:balance" style-hover="color:oklch(0.7 0.19 45)">Testing a drummer on drummers he has never heard</a>
+        <div style="display:flex;align-items:center;gap:0.6em;margin-top:auto;font-size:0.85em;font-weight:600;color:var(--dim)">
+          <span>268K views</span>
+          <span>·</span>
+          <span>8 days ago</span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div data-shell style="--bg:#0a0a0a;--fg:#f2efea;--muted:#c9c5be;--dim:#8b8781;--line:#403d39;--art:#141312;--chip:rgb(255 255 255 / 0.06);background:var(--bg);color:var(--fg);font-family:Archivo,Helvetica,sans-serif;font-size:var(--ts-base);padding:1.5em var(--ts-pad) 5.5em;box-sizing:border-box;position:relative">
+  <div data-stars style="position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2228%22%20viewBox%3D%220%200%2040%2028%22%3E%3Cpolygon%20points%3D%2220%2C10.6%2020.83%2C13.1%2023.45%2C13.1%2021.31%2C14.66%2022.14%2C17.16%2020%2C15.6%2017.86%2C17.16%2018.69%2C14.66%2016.55%2C13.1%2019.17%2C13.1%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E');background-size:40px 28px;background-position:center;opacity:0.04;mask-image:linear-gradient(to bottom, transparent 0%, rgb(0 0 0 / 0.45) 16%, #000 40%, #000 62%, rgb(0 0 0 / 0.45) 84%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, transparent 0%, rgb(0 0 0 / 0.45) 16%, #000 40%, #000 62%, rgb(0 0 0 / 0.45) 84%, transparent 100%)"></div>
+  <div data-stars-hot style="position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2228%22%20viewBox%3D%220%200%2040%2028%22%3E%3Cpolygon%20points%3D%2220%2C10.6%2020.83%2C13.1%2023.45%2C13.1%2021.31%2C14.66%2022.14%2C17.16%2020%2C15.6%2017.86%2C17.16%2018.69%2C14.66%2016.55%2C13.1%2019.17%2C13.1%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E');background-size:40px 28px;background-position:center;opacity:0.1;mask-image:linear-gradient(to bottom, transparent 0%, rgb(0 0 0 / 0.45) 16%, #000 40%, #000 62%, rgb(0 0 0 / 0.45) 84%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, transparent 0%, rgb(0 0 0 / 0.45) 16%, #000 40%, #000 62%, rgb(0 0 0 / 0.45) 84%, transparent 100%)"></div>
+  <div style="position:absolute;top:4em;left:-10em;width:30em;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, oklch(0.7 0.19 45 / 0.12) 0%, oklch(0.7 0.19 45 / 0.054) 34%, transparent 72%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;bottom:3em;right:-8em;width:28em;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, oklch(0.7 0.19 45 / 0.1) 0%, oklch(0.7 0.19 45 / 0.045) 34%, transparent 72%);pointer-events:none;z-index:0"></div>
+  <div style="position:relative;z-index:1;max-width:82em;margin:0 auto;padding-top:1.5em">
+    <div style="position:relative;z-index:1;max-width:62em;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:0.7em">
+      <h2 style="margin:0;font-size:var(--ts-h2);font-weight:800;line-height:0.95;letter-spacing:-0.045em;text-wrap:balance">Records, and the<br>people keeping them.</h2>
+    </div>
+
+    <div style="margin-top:var(--ts-secgap);display:var(--ts-cards);grid-template-columns:repeat(auto-fit,minmax(min(100%,20em),1fr));gap:1.5em;overflow-x:var(--ts-cardov);scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:var(--ts-bleed);padding-inline:var(--ts-cardpad);">
+      <div style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:1.4em;overflow:hidden;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:linear-gradient(135deg, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.045) 38%, rgb(255 255 255 / 0.015) 68%, rgb(255 255 255 / 0) 100%);border-color:rgb(255 255 255 / 0.18);transform:translateY(-4px);box-shadow:0 24px 60px rgb(0 0 0 / 0.45)">
+        <div style="aspect-ratio:var(--ts-story-ar);background:var(--art);flex:0 0 auto"><img loading="lazy" decoding="async" src="./stories/story-1.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.9em;padding:1.5em;flex:1">
+          <span style="font-size:0.78em;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:oklch(0.7 0.19 45)">Labels</span>
+          <span style="font-size:1.5em;font-weight:800;line-height:1.14;letter-spacing:-0.035em;text-wrap:balance">The Brazilian reissue label rewriting its own catalogue</span>
+          <p style="margin:0 0 auto;font-size:1em;font-weight:500;line-height:1.55;color:var(--muted);text-wrap:pretty">Twelve records in eighteen months, all pressed from tapes nobody had touched since 1974.</p>
+          <a href="#" style="font-size:0.95em;font-weight:700;color:oklch(0.7 0.19 45)" style-hover="color:oklch(0.8 0.17 45)">Read story</a>
+        </div>
+      </div>
+      <div style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:1.4em;overflow:hidden;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:linear-gradient(135deg, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.045) 38%, rgb(255 255 255 / 0.015) 68%, rgb(255 255 255 / 0) 100%);border-color:rgb(255 255 255 / 0.18);transform:translateY(-4px);box-shadow:0 24px 60px rgb(0 0 0 / 0.45)">
+        <div style="aspect-ratio:var(--ts-story-ar);background:var(--art);flex:0 0 auto"><img loading="lazy" decoding="async" src="./stories/story-2.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.9em;padding:1.5em;flex:1">
+          <span style="font-size:0.78em;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:oklch(0.7 0.19 45)">Data</span>
+          <span style="font-size:1.5em;font-weight:800;line-height:1.14;letter-spacing:-0.035em;text-wrap:balance">What a perfect 10 actually means to two million raters</span>
+          <p style="margin:0 0 auto;font-size:1em;font-weight:500;line-height:1.55;color:var(--muted);text-wrap:pretty">We read 40,000 tens. Almost none were about flawless music — they were about where people were standing.</p>
+          <a href="#" style="font-size:0.95em;font-weight:700;color:oklch(0.7 0.19 45)" style-hover="color:oklch(0.8 0.17 45)">Read story</a>
+        </div>
+      </div>
+      <div style="flex:0 0 var(--ts-cardw);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:1.4em;overflow:hidden;border:1px solid var(--line);background:rgb(255 255 255 / 0.025);transition:background 0.45s ease,border-color 0.45s ease,transform 0.45s cubic-bezier(0.2,0.85,0.2,1),box-shadow 0.45s ease" style-hover="background:linear-gradient(135deg, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.045) 38%, rgb(255 255 255 / 0.015) 68%, rgb(255 255 255 / 0) 100%);border-color:rgb(255 255 255 / 0.18);transform:translateY(-4px);box-shadow:0 24px 60px rgb(0 0 0 / 0.45)">
+        <div style="aspect-ratio:var(--ts-story-ar);background:var(--art);flex:0 0 auto"><img loading="lazy" decoding="async" src="./stories/story-3.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="display:flex;flex-direction:column;gap:0.9em;padding:1.5em;flex:1">
+          <span style="font-size:0.78em;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:oklch(0.7 0.19 45)">Shelves</span>
+          <span style="font-size:1.5em;font-weight:800;line-height:1.14;letter-spacing:-0.035em;text-wrap:balance">Six collections from the people who never post</span>
+          <p style="margin:0 0 auto;font-size:1em;font-weight:500;line-height:1.55;color:var(--muted);text-wrap:pretty">The quietest accounts keep the strangest records. Six of them opened the door and explained one each.</p>
+          <a href="#" style="font-size:0.95em;font-weight:700;color:oklch(0.7 0.19 45)" style-hover="color:oklch(0.8 0.17 45)">Read story</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer data-footer style="background:oklch(0.7 0.19 45);color:#2a1004;font-family:Archivo,Helvetica,sans-serif;font-size:var(--ts-base);padding:2em var(--ts-pad) 2.2em;box-sizing:border-box">
+  <div style="max-width:82em;margin:0 auto;display:flex;flex-direction:column;gap:var(--ts-fgap)">
+    <div style="display:flex;flex-direction:var(--ts-fdir);align-items:center;justify-content:var(--ts-fjust);gap:var(--ts-fgap)">
+      <img src="./mark-trackstar-white.svg" alt="Track Star" style="height:var(--ts-flogo);width:auto;display:block">
+      <div style="display:flex;align-items:center;justify-content:var(--ts-fnavjust);gap:1.4em 2.2em;flex-wrap:wrap;text-align:center">
+        <a href="#" style="font-size:1em;font-weight:500;color:#2a1004;letter-spacing:-0.01em;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:0.28em" style-hover="color:#ffffff">Charts</a>
+        <a href="#" style="font-size:1em;font-weight:500;color:#2a1004;letter-spacing:-0.01em;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:0.28em" style-hover="color:#ffffff">Lists</a>
+        <a href="#" style="font-size:1em;font-weight:500;color:#2a1004;letter-spacing:-0.01em;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:0.28em" style-hover="color:#ffffff">Reviews</a>
+        <a href="#" style="font-size:1em;font-weight:500;color:#2a1004;letter-spacing:-0.01em;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:0.28em" style-hover="color:#ffffff">Podcast</a>
+        <a href="#" style="font-size:1em;font-weight:500;color:#2a1004;letter-spacing:-0.01em;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:0.28em" style-hover="color:#ffffff">Stories</a>
+        <a href="#" style="font-size:1em;font-weight:500;color:#2a1004;letter-spacing:-0.01em;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:0.28em" style-hover="color:#ffffff">Support</a>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:0.6em;order:var(--ts-forder)">
+        <a href="#" aria-label="X" style="display:inline-flex;align-items:center;justify-content:center;width:2.2em;height:2.2em;border-radius:50%;background:rgb(255 255 255 / 0.16);color:#ffffff" style-hover="background:rgb(255 255 255 / 0.28)">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:1.05em;height:1.05em;display:block"><path d="M17.5 3h3.2l-7 8 7.3 9.9h-5.9l-4.3-5.9L5.6 21H2.4l7.4-8.4L2.8 3h6l4 5.4z"></path></svg>
+        </a>
+        <a href="#" aria-label="Instagram" style="display:inline-flex;align-items:center;justify-content:center;width:2.2em;height:2.2em;border-radius:50%;background:rgb(255 255 255 / 0.16);color:#ffffff" style-hover="background:rgb(255 255 255 / 0.28)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true" style="width:1.15em;height:1.15em;display:block">
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </a>
+        <a href="#" aria-label="YouTube" style="display:inline-flex;align-items:center;justify-content:center;width:2.2em;height:2.2em;border-radius:50%;background:rgb(255 255 255 / 0.16);color:#ffffff" style-hover="background:rgb(255 255 255 / 0.28)">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:1.05em;height:1.05em;display:block"><path d="M21.6 7.2c-.23-.86-.9-1.53-1.76-1.76C18.25 5 12 5 12 5s-6.25 0-7.84.44C3.3 5.67 2.63 6.34 2.4 7.2 2 8.8 2 12 2 12s0 3.2.4 4.8c.23.86.9 1.53 1.76 1.76C5.75 19 12 19 12 19s6.25 0 7.84-.44c.86-.23 1.53-.9 1.76-1.76C22 15.2 22 12 22 12s0-3.2-.4-4.8zM10 15.2V8.8l5.5 3.2-5.5 3.2z"></path></svg>
+        </a>
+      </div>
+    </div>
+
+    <div style="height:1px;background:rgb(42 16 4 / 0.16)"></div>
+
+    <div style="display:flex;flex-direction:var(--ts-fdir);align-items:center;justify-content:var(--ts-fjust);gap:1.1em 1.6em">
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.4em;flex-wrap:wrap">
+        <span style="font-size:0.85em;font-weight:700;color:#2a1004">© 2026 Track Star</span>
+        <a href="#" style="font-size:0.85em;font-weight:600;color:rgb(42 16 4 / 0.68)" style-hover="color:#2a1004">Terms</a>
+        <a href="#" style="font-size:0.85em;font-weight:600;color:rgb(42 16 4 / 0.68)" style-hover="color:#2a1004">Privacy</a>
+        <a href="#" style="font-size:0.85em;font-weight:600;color:rgb(42 16 4 / 0.68)" style-hover="color:#2a1004">Cookies</a>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.4em;flex-wrap:wrap">
+        <a href="#" style="font-size:0.85em;font-weight:600;color:rgb(42 16 4 / 0.68)" style-hover="color:#2a1004">Jobs</a>
+        <a href="#" style="font-size:0.85em;font-weight:600;color:rgb(42 16 4 / 0.68)" style-hover="color:#2a1004">Press</a>
+        <a href="#" style="font-size:0.85em;font-weight:600;color:rgb(42 16 4 / 0.68)" style-hover="color:#2a1004">Apps</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const hots = Array.prototype.slice.call(document.querySelectorAll('[data-stars-hot]'));
+    if (hots.length) {
+      const off = 'radial-gradient(circle 150px at -300px -300px, #000 0%, rgba(0,0,0,0.35) 55%, transparent 78%)';
+      hots.forEach(el => { el.style.maskImage = off; el.style.webkitMaskImage = off; });
+      this._move = ev => {
+        hots.forEach(el => {
+          const b = el.getBoundingClientRect();
+          const g = 'radial-gradient(circle 150px at ' + (ev.clientX - b.left).toFixed(0) + 'px ' + (ev.clientY - b.top).toFixed(0) + 'px, #000 0%, rgba(0,0,0,0.35) 55%, transparent 78%)';
+          el.style.maskImage = g;
+          el.style.webkitMaskImage = g;
+        });
+      };
+      window.addEventListener('pointermove', this._move, { passive: true });
+    }
+    const track = document.querySelector('[data-track]');
+    const wrap = document.querySelector('[data-marquee]');
+    const cards = Array.prototype.slice.call(document.querySelectorAll('[data-cover]'));
+    const m = { gap: 0, w: 0, step: 0, period: 0, base: 0, cx: 0, reach: 420, h: 0 };
+    const measure = () => {
+      if (!track || !wrap || !cards.length) return;
+      m.gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      m.w = cards[0].offsetWidth;
+      m.step = m.w + m.gap;
+      m.period = cards.length / 2 * m.step;
+      const wr = wrap.getBoundingClientRect();
+      m.base = wr.left + track.offsetLeft;
+      m.cx = wr.width / 2;
+      m.reach = Math.max(wr.width * 0.5, 420);
+      m.h = wr.height;
+    };
+    measure();
+    this._resize = () => measure();
+    window.addEventListener('resize', this._resize);
+    if (wrap) {
+      const layer = document.createElement('div');
+      layer.setAttribute('style', 'position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden');
+      wrap.appendChild(layer);
+      let lastSpark = 0;
+      this._spark = ev => {
+        const now = performance.now();
+        if (now - lastSpark < 90) return;
+        lastSpark = now;
+        const b = wrap.getBoundingClientRect();
+        const px = ev.clientX - b.left, py = ev.clientY - b.top;
+        if (px < 0 || py < 0 || px > b.width || py > b.height) return;
+        const s = document.createElement('span');
+        const size = 13 + Math.random() * 14;
+        const dur = 1500 + Math.random() * 900;
+        const tone = 0.58 + Math.random() * 0.26;
+        const hue = 38 + Math.random() * 16;
+        s.textContent = '★';
+        s.setAttribute('style', 'position:absolute;left:' + (px + (Math.random() - 0.5) * 40).toFixed(1) + 'px;top:' + (py + (Math.random() - 0.5) * 26).toFixed(1) + 'px;font-size:' + size.toFixed(1) + 'px;line-height:1;color:oklch(' + (tone + 0.1).toFixed(2) + ' 0.17 ' + hue.toFixed(0) + ');text-shadow:0 0 6px oklch(0.85 0.13 45 / 0.9), 0 0 16px oklch(0.72 0.19 45 / 0.75), 0 0 34px oklch(0.68 0.2 42 / 0.5);will-change:transform,opacity;animation:ts-star-fall ' + dur.toFixed(0) + 'ms cubic-bezier(0.22,0.7,0.24,1) forwards');
+        s.addEventListener('animationend', () => s.remove());
+        layer.appendChild(s);
+      };
+      wrap.addEventListener('pointermove', this._spark, { passive: true });
+      this._sparkHost = wrap;
+      this._slowT = 0;
+      this._enter = () => { this._slow = true; };
+      this._leave = () => { this._slow = false; };
+      cards.forEach(c => {
+        c.addEventListener('pointerenter', this._enter);
+        c.addEventListener('pointerleave', this._leave);
+      });
+    }
+    const reveals = Array.prototype.slice.call(document.querySelectorAll('[data-reveal],[data-pop]'));
+    if (reveals.length && window.IntersectionObserver) {
+      reveals.forEach(el => { el.style.opacity = '0'; });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const group = el.hasAttribute('data-pop') ? el.parentElement.children : null;
+          const idx = group ? Array.prototype.indexOf.call(group, el) : reveals.indexOf(el);
+          const delay = (el.hasAttribute('data-pop') ? 0.12 + idx * 0.09 : idx * 0.1).toFixed(2);
+          el.style.opacity = '';
+          el.style.animation = (el.hasAttribute('data-pop') ? 'ts-pop 0.75s' : 'ts-rise 0.9s') + ' cubic-bezier(0.16,1,0.3,1) ' + delay + 's both';
+          if (el.hasAttribute('data-pulse')) {
+            el.addEventListener('animationend', () => {
+              el.style.animation = 'ts-pulse 2.6s ease-in-out 0.4s infinite';
+            }, { once: true });
+          }
+          io.unobserve(el);
+        });
+      }, { threshold: 0.25 });
+      reveals.forEach(el => io.observe(el));
+      this._io = io;
+    }
+    const faces = Array.prototype.slice.call(document.querySelectorAll('[data-face]'));
+    if (faces.length) {
+      const pool = ['p1','p2','p3','p4','p5','p6','p7','p8','p9'];
+      let cursor = faces.length;
+      let slot = 0;
+      this._faceTimer = setInterval(() => {
+        if (document.hidden) return;
+        const img = faces[slot % faces.length];
+        slot++;
+        const next = './people/' + pool[cursor % pool.length] + '.png';
+        cursor++;
+        const circle = img.parentElement;
+        if (!circle || circle.querySelector('[data-face-in]')) return;
+        circle.style.position = 'relative';
+        const over = document.createElement('img');
+        over.setAttribute('data-face-in', '');
+        over.setAttribute('alt', '');
+        over.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.06);transition:opacity 900ms cubic-bezier(0.4,0,0.2,1),transform 900ms cubic-bezier(0.4,0,0.2,1)');
+        over.src = next;
+        const start = () => {
+          circle.appendChild(over);
+          requestAnimationFrame(() => {
+            over.style.opacity = '1';
+            over.style.transform = 'scale(1)';
+          });
+          setTimeout(() => {
+            img.src = next;
+            over.remove();
+          }, 980);
+        };
+        if (over.complete) start(); else over.addEventListener('load', start, { once: true });
+      }, 1900);
+    }
+    this._shineCleanup = [];
+    document.querySelectorAll('[data-shine]').forEach(card => {
+      const enter = () => {
+        const g = document.createElement('span');
+        g.setAttribute('style', 'position:absolute;left:-45%;top:-45%;width:190%;height:190%;pointer-events:none;z-index:3;background:linear-gradient(122deg, transparent 30%, rgb(255 255 255 / 0.015) 40%, rgb(255 255 255 / 0.055) 47%, rgb(255 255 255 / 0.13) 50%, rgb(255 255 255 / 0.055) 53%, rgb(255 255 255 / 0.015) 60%, transparent 70%);will-change:transform,opacity;animation:ts-sweep 1450ms cubic-bezier(0.16,0.85,0.2,1) forwards');
+        g.addEventListener('animationend', () => g.remove());
+        card.appendChild(g);
+      };
+      card.addEventListener('pointerenter', enter);
+      this._shineCleanup.push(() => card.removeEventListener('pointerenter', enter));
+    });
+    this._previewCleanup = [];
+    document.querySelectorAll('[data-video]').forEach(box => {
+      const link = box.parentElement.querySelector('a[href*="youtube.com/watch"]');
+      const id = link ? (link.getAttribute('href').split('v=')[1] || '').split('&')[0] : '';
+      if (!id) return;
+      const frames = ['hq1', 'hq2', 'hq3', 'mqdefault'];
+      let layer = null, timer = null, cycle = null, step = 0;
+      const enter = () => {
+        if (layer || timer) return;
+        timer = setTimeout(() => {
+          timer = null;
+          step = 0;
+          layer = document.createElement('img');
+          layer.setAttribute('alt', '');
+          layer.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;opacity:0;transition:opacity 0.35s ease');
+          layer.src = 'https://i.ytimg.com/vi/' + id + '/' + frames[0] + '.jpg';
+          box.appendChild(layer);
+          requestAnimationFrame(() => { if (layer) layer.style.opacity = '1'; });
+          cycle = setInterval(() => {
+            if (!layer) return;
+            step = (step + 1) % frames.length;
+            layer.src = 'https://i.ytimg.com/vi/' + id + '/' + frames[step] + '.jpg';
+          }, 850);
+        }, 200);
+      };
+      const leave = () => {
+        if (timer) { clearTimeout(timer); timer = null; }
+        if (cycle) { clearInterval(cycle); cycle = null; }
+        if (layer) { layer.remove(); layer = null; }
+      };
+      box.parentElement.addEventListener('pointerenter', enter);
+      box.parentElement.addEventListener('pointerleave', leave);
+      this._previewCleanup.push(() => {
+        box.parentElement.removeEventListener('pointerenter', enter);
+        box.parentElement.removeEventListener('pointerleave', leave);
+        leave();
+      });
+    });
+    let x = 0, last = performance.now(), t0 = last;
+    const tick = () => {
+      const now = performance.now();
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      if (m.period <= 0) measure();
+      const target = Math.min(window.scrollY / Math.max(window.innerHeight * 0.8, 1), 1);
+      this._bend = (this._bend || 0) + (target - (this._bend || 0)) * Math.min(dt * 6, 1);
+      if (!document.hidden && m.period > 0) {
+        const cruise = m.period / 31;
+        this._slowT = (this._slowT || 0) + ((this._slow ? 1 : 0) - (this._slowT || 0)) * Math.min(dt * 5, 1);
+        const v = (cruise + (m.period * 1.05 - cruise) * Math.exp(-(now - t0) / 1350)) * (1 - 0.72 * this._slowT);
+        x = (x - v * dt) % m.period;
+        track.style.transform = 'translateX(' + x.toFixed(2) + 'px)';
+        for (let i = 0; i < cards.length; i++) {
+          const el = cards[i];
+          const centre = m.base + x + i * m.step + m.w / 2;
+          const dx = (centre - (m.base + m.cx)) / m.reach;
+          const d = Math.min(Math.abs(dx), 1);
+          const ee = d * d * (3 - 2 * d);
+          const near = 1 - ee;
+          const pop = near * near;
+          const bend = this._bend || 0;
+          const arc = bend * 46 * Math.min(dx * dx, 1);
+          const swing = bend * 6.5 * Math.max(-1, Math.min(dx, 1));
+          el.style.opacity = Math.max(0, 1 - bend * (0.45 + 0.85 * Math.min(dx * dx, 1))).toFixed(3);
+          el.style.transform = 'translateY(' + (-Math.min(14, m.h * 0.05) * pop + arc).toFixed(2) + 'px) rotate(' + (1.3 * Math.sign(dx) * ee + swing).toFixed(2) + 'deg) scale(' + (1 - 0.09 * ee - bend * 0.04).toFixed(4) + ')';
+          el.firstElementChild.style.transform = 'translateY(' + (3 * ee).toFixed(2) + 'px)';
+          const art = el.lastElementChild;
+          art.style.opacity = (0.72 + 0.28 * near).toFixed(3);
+          art.style.filter = 'saturate(' + (0.72 + 0.28 * near).toFixed(3) + ') brightness(' + (0.82 + 0.18 * near).toFixed(3) + ') blur(' + (0.6 * ee * ee).toFixed(2) + 'px)';
+          art.style.boxShadow = near > 0.05 ? '0 ' + (8 + 16 * near).toFixed(0) + 'px ' + (18 + 30 * near).toFixed(0) + 'px rgb(0 0 0 / ' + (0.38 * near).toFixed(2) + ')' : 'none';
+        }
+      }
+      this._raf = requestAnimationFrame(tick);
+    };
+    this._raf = requestAnimationFrame(tick);
+  }
+  componentWillUnmount() {
+    cancelAnimationFrame(this._raf);
+    if (this._move) window.removeEventListener('pointermove', this._move);
+    if (this._resize) window.removeEventListener('resize', this._resize);
+    if (this._spark && this._sparkHost) this._sparkHost.removeEventListener('pointermove', this._spark);
+    if (this._previewCleanup) this._previewCleanup.forEach(fn => fn());
+    if (this._shineCleanup) this._shineCleanup.forEach(fn => fn());
+    if (this._io) this._io.disconnect();
+    if (this._faceTimer) clearInterval(this._faceTimer);
+    if (this._enter) document.querySelectorAll('[data-cover]').forEach(c => {
+      c.removeEventListener('pointerenter', this._enter);
+      c.removeEventListener('pointerleave', this._leave);
+    });
+  }
+  renderVals() {
+    const arrow = () => document.querySelector('[data-cta-arrow]');
+    const palettes = {
+      dark: { bg: '#0a0a0a', fg: '#f2efea', muted: '#c9c5be', dim: '#8b8781', line: '#403d39', stroke: '#4a4744', art: '#141312', chip: 'rgb(255 255 255 / 0.06)', 'chip-hover': 'rgb(255 255 255 / 0.13)', 'scrim-a': 'rgb(10 10 10 / 0.88)', 'scrim-b': 'rgb(10 10 10 / 0.42)' },
+      light: { bg: '#f3f0ea', fg: '#16130f', muted: '#514c45', dim: '#7a746b', line: '#d3cdc2', stroke: '#bdb6aa', art: '#e5e0d6', chip: 'rgb(22 19 15 / 0.08)', 'chip-hover': 'rgb(22 19 15 / 0.16)', 'scrim-a': 'rgb(243 240 234 / 0.9)', 'scrim-b': 'rgb(243 240 234 / 0.45)' }
+    };
+    const setTheme = light => {
+      const p = palettes[light ? 'light' : 'dark'];
+      const stars = document.querySelector('[data-stars]');
+      const shells = [stars && stars.parentElement, ...document.querySelectorAll('[data-shell]')].filter(Boolean);
+      shells.forEach(s => Object.keys(p).forEach(k => s.style.setProperty('--' + k, p[k])));
+      document.querySelectorAll('[data-stars],[data-stars-hot]').forEach(el => { el.style.filter = light ? 'invert(1)' : 'none'; });
+      const moon = document.querySelector('[data-icon-moon]');
+      const sun = document.querySelector('[data-icon-sun]');
+      if (moon) moon.style.display = light ? 'none' : 'block';
+      if (sun) sun.style.display = light ? 'block' : 'none';
+      this._light = light;
+    };
+    return {
+      toggleTheme: () => setTheme(!this._light),
+      ctaIn: () => {
+        const a = arrow();
+        if (a) {
+          a.style.animation = 'none';
+          void a.offsetWidth;
+          a.style.animation = 'ts-fly 0.62s cubic-bezier(0.4,0,0.2,1) 1';
+        }
+      },
+      ctaOut: () => {
+        const a = arrow();
+        if (a) a.style.animation = 'none';
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
